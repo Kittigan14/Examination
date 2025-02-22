@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers with High Used Amount</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { width: 80%; margin: 20px auto; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 10px; }
+        th { background-color: #007bff; color: white; }
+    </style>
+</head>
+<body>
+
+    <h2>Customers with Used > 500,000</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Country Code</th>
+                <th>Budget</th>
+                <th>Used</th>
+            </tr>
+        </thead>
+        <tbody id="customerTable"></tbody>
+    </table>
+
+    <script>
+        async function fetchHighUsedCustomers() {
+            try {
+                const response = await fetch("http://localhost:3000/high-used-customers");
+                const data = await response.json();
+
+                const tableBody = document.getElementById("customerTable");
+                tableBody.innerHTML = ""; 
+
+                data.forEach(customer => {
+                    let row = `<tr>
+                        <td>${customer.ID}</td>
+                        <td>${customer.Name}</td>
+                        <td>${customer.Email}</td>
+                        <td>${customer.CountryCode}</td>
+                        <td>${customer.Budget.toLocaleString()}</td>
+                        <td>${customer.Used.toLocaleString()}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("❌ Error fetching data:", error);
+            }
+        }
+
+        fetchHighUsedCustomers();
+    </script>
+
+</body>
+</html>
